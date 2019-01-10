@@ -1,19 +1,10 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const UserModel = require("../models/User");
+const mongoose = require("mongoose");
 
 router.route('/')
-  .get((req, res) => {
-    
-  })
-  .post(async (req, res) => {
-    const user = new UserModel(req.body);
-    const userCreated = await user.save().catch(err => {
-      // ...validate error
-      res.status(500).json({ error: err });
-    });
-
-    res.status(201).json(userCreated);
-  });
+  .get((req, res) => {});
 
 module.exports = router;

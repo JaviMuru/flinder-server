@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt');
 const UserModel = require("../models/User");
 
 router.post('/', async (req, res, next) => {
@@ -13,25 +12,21 @@ router.post('/', async (req, res, next) => {
   }
 
   UserModel.findOne({
-    username: req.body.username
-  }, (err, userdb) => {
-    if (userdb && userdb === undefined && userdb === null) {
+    "info.username": req.body.username
+  }, (err, user) => {
+    if (user === null || user === null) {
       return res.status(404).send('Not found');
     };
-
     if (err) {
       return (err);
     }
-
-    if (req.body.password.toString() === userdb.password.toString()) {
-      req.session.user = userdb._id;
-      res.status(200).send('Login successful');
+    if (req.body.password.toString() === user.auth.password.toString()) {
+      req.session = user._id;
+      return res.status(200).send('Login successful');
+    } else {
+      return res.status(400).send('Unauthorized')
     }
-
-    res.status(400).send('Unauthorized')
-
   });
-
 });
 
 module.exports = router;
